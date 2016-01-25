@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+
+@helper SelectedTabClass(string tabName)
+{
+    if (tabName == ViewBag.SelectedTab)
+    {
+        @: active
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@ViewBag.Title - SimpleBlog Admin</title>
+        
+        @Styles.Render("~/Admin/Styles")
+    </head>
+    <body>
+        <div class="container">
+            <ul class="nav nav-pills">
+                <li class="@SelectedTabClass("Posts")">
+                    @Html.ActionLink("Posts", "Index", "Posts", new {area = "Admin"}, new object())
+                </li>
+                <li class="@SelectedTabClass("Users")">
+                    @Html.ActionLink("Users", "Index", "Users", new { area = "Admin" }, new object())
+                </li>
+                <li class="pull-right">
+                    @Html.RouteLink("Home", "Home")
+                </li>
+            </ul>
+            
+            @RenderBody()
+        </div>
+        
+        @Scripts.Render("~/Admin/Scripts")
+        @RenderSection("Scripts", false)
+        
+        <form class="hidden" id="anti-forgery-form">
+            @Html.AntiForgeryToken()
+        </form>
+    </body>
+</html>

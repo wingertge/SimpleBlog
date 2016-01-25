@@ -1,0 +1,73 @@
+﻿@using SimpleBlog.ViewModels
+@model SimpleBlog.ViewModels.LayoutSidebar
+
+@{
+    Layout = null;
+}
+
+@if (Model.IsLoggedIn)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">Welcome back, @Model.Username</div>
+        <div class="panel-body">
+            <div class="btn-group btn-group-sm">
+                <a href="@Url.RouteUrl("Logout")" class="btn btn-default">Logout</a>
+            </div>
+            @if (Model.IsAdmin)
+            {
+                <div class="btn-group btn-group-sm">
+                    <a href="@Url.Action("Index", "Posts", new {Area = "admin"})" class="btn btn-default">Posts</a>
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="@Url.Action("New", "Posts", new {Area = "admin"})">Create Post</a>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="panel panel-warning">
+        <div class="panel-heading">You're not logged in right now!</div>
+        <div class="panel-body">
+            @Html.Partial("_Login", new AuthLogin())
+        </div>
+    </div>
+}
+
+<div class="panel panel-success">
+    <div class="panel-heading">About Me</div>
+    <div class="panel-body">
+        I'm a person and I do stuff and things
+    </div>
+</div>
+
+@if (Model.Tags.Any())
+{
+    var maxPostsInTag = Model.Tags.Max(a => a.PostCount);
+    
+    <div class="panel panel-info tags">
+        <div class="panel-heading">Tags</div>
+        <div class="panel-body">
+            <div class="list-group">
+                @foreach (var tag in Model.Tags)
+                {
+                    var percent = Math.Ceiling((float) tag.PostCount/maxPostsInTag*100);
+                    
+                    <a href="@Url.RouteUrl("Tag", new{tag.Id, tag.Slug})" class="list-group-item">
+                        <span class="name">@tag.Name</span>
+                        <span class="badge">@tag.PostCount</span>
+                        <span class="progress">
+                            <span class="progress-bar progress-bar-info" style="width: @percent%"></span>
+                        </span>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+}

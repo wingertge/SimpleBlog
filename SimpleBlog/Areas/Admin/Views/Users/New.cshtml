@@ -1,0 +1,33 @@
+﻿@model SimpleBlog.Areas.Admin.ViewModels.UsersNew
+
+@{
+    ViewBag.Title = "Create User";
+}
+
+<h1>New User</h1>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    
+    <div class="form-group">
+        @Html.LabelFor(a => a.Username)
+        @Html.TextBoxFor(a => a.Username, new {@class = "form-control"})
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(a => a.Email)
+        @Html.TextBoxFor(a => a.Email, new { @class = "form-control", type = "email" })
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(a => a.Password)
+        @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+    </div>
+    
+    @Html.Partial("_RoleEditor", Model.Roles)
+    
+    <input type="submit" class="btn btn-primary" value="Create User" />
+    <a href="@Url.Action("Index")"> or Cancel</a>
+}
